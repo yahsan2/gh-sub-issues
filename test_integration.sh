@@ -74,6 +74,7 @@ echo ""
 echo "=== Basic Command Tests ==="
 run_test "Help command" "./gh-sub-issues --help" "A GitHub CLI extension that adds sub-issue management"
 run_test "Add help" "./gh-sub-issues add --help" "Link an existing issue to a parent issue"
+run_test "List help" "./gh-sub-issues list --help" "List all sub-issues connected to a parent issue"
 
 # Test 2: Version
 run_test "Version" "./gh-sub-issues --version" "version"
@@ -92,6 +93,14 @@ echo ""
 echo "=== URL Parsing Tests ==="
 run_test "Invalid URL format" "./gh-sub-issues add https://example.com/123 456 --repo test/repo" "ERROR:invalid GitHub issue URL format"
 run_test "Non-issue URL" "./gh-sub-issues add https://github.com/owner/repo/pull/123 456 --repo test/repo" "ERROR:not an issue URL"
+
+# Test 5: List command tests
+echo ""
+echo "=== List Command Tests ==="
+run_test "List missing arguments" "./gh-sub-issues list" "ERROR:accepts 1 arg(s), received 0"
+run_test "List too many arguments" "./gh-sub-issues list 1 2" "ERROR:accepts 1 arg(s), received 2"
+run_test "List invalid issue number" "./gh-sub-issues list abc --repo test/repo" "ERROR:invalid issue reference"
+run_test "List invalid repo format" "./gh-sub-issues list 1 --repo invalid-format" "ERROR:invalid repository format"
 
 # Summary
 echo ""
