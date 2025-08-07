@@ -1,19 +1,8 @@
-# gh-sub-issues
+# gh-sub-issue
 
-> ⚠️ **DEPRECATED**: This repository has been renamed to [`gh-sub-issue`](https://github.com/yahsan2/gh-sub-issue) for consistency with GitHub CLI naming conventions.
-> 
-> **Please use the new repository:** https://github.com/yahsan2/gh-sub-issue
-> 
-> ```bash
-> gh extension remove sub-issues
-> gh extension install yahsan2/gh-sub-issue
-> ```
-
----
-
-[![GitHub release (latest by date)](https://img.shields.io/github/v/release/yahsan2/gh-sub-issues)](https://github.com/yahsan2/gh-sub-issues/releases)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/yahsan2/gh-sub-issue)](https://github.com/yahsan2/gh-sub-issue/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Go Report Card](https://goreportcard.com/badge/github.com/yahsan2/gh-sub-issues)](https://goreportcard.com/report/github.com/yahsan2/gh-sub-issues)
+[![Go Report Card](https://goreportcard.com/badge/github.com/yahsan2/gh-sub-issue)](https://goreportcard.com/report/github.com/yahsan2/gh-sub-issue)
 
 A GitHub CLI extension for managing sub-issues (child issues). Create hierarchical task structures by linking issues as parent-child relationships.
 
@@ -28,7 +17,7 @@ A GitHub CLI extension for managing sub-issues (child issues). Create hierarchic
 ## 📦 Installation
 
 ```bash
-gh extension install yahsan2/gh-sub-issues
+gh extension install yahsan2/gh-sub-issue
 ```
 
 ### Requirements
@@ -44,13 +33,13 @@ Link an existing issue to a parent issue:
 
 ```bash
 # Using issue numbers
-gh sub-issues add 123 456
+gh sub-issue add 123 456
 
 # Using URLs
-gh sub-issues add https://github.com/owner/repo/issues/123 456
+gh sub-issue add https://github.com/owner/repo/issues/123 456
 
 # Cross-repository
-gh sub-issues add 123 456 --repo owner/repo
+gh sub-issue add 123 456 --repo owner/repo
 ```
 
 ### Create a new sub-issue
@@ -59,17 +48,17 @@ Create a new issue directly linked to a parent:
 
 ```bash
 # Basic usage
-gh sub-issues create --parent 123 --title "Implement user authentication"
+gh sub-issue create --parent 123 --title "Implement user authentication"
 
 # With description and labels
-gh sub-issues create --parent 123 \
+gh sub-issue create --parent 123 \
   --title "Add login endpoint" \
   --body "Implement POST /api/login endpoint" \
   --label "backend,api" \
   --assignee "@me"
 
 # Using parent issue URL
-gh sub-issues create \
+gh sub-issue create \
   --parent https://github.com/owner/repo/issues/123 \
   --title "Write API tests"
 ```
@@ -80,27 +69,27 @@ View all sub-issues linked to a parent issue:
 
 ```bash
 # Basic listing
-gh sub-issues list 123
+gh sub-issue list 123
 
 # Show all states (open, closed)
-gh sub-issues list 123 --state all
+gh sub-issue list 123 --state all
 
 # JSON output for scripting
-gh sub-issues list 123 --json
+gh sub-issue list 123 --json
 
 # Using URL
-gh sub-issues list https://github.com/owner/repo/issues/123
+gh sub-issue list https://github.com/owner/repo/issues/123
 ```
 
 ## 📋 Command Reference
 
-### `gh sub-issues add`
+### `gh sub-issue add`
 
 Add an existing issue as a sub-issue to a parent issue.
 
 ```
 Usage:
-  gh sub-issues add <parent-issue> <sub-issue> [flags]
+  gh sub-issue add <parent-issue> <sub-issue> [flags]
 
 Arguments:
   parent-issue    Parent issue number or URL
@@ -111,13 +100,13 @@ Flags:
   -h, --help      Show help for command
 ```
 
-### `gh sub-issues create`
+### `gh sub-issue create`
 
 Create a new sub-issue linked to a parent issue.
 
 ```
 Usage:
-  gh sub-issues create [flags]
+  gh sub-issue create [flags]
 
 Flags:
   -P, --parent       Parent issue number or URL (required)
@@ -131,13 +120,13 @@ Flags:
   -h, --help         Show help for command
 ```
 
-### `gh sub-issues list`
+### `gh sub-issue list`
 
 List all sub-issues for a parent issue.
 
 ```
 Usage:
-  gh sub-issues list <parent-issue> [flags]
+  gh sub-issue list <parent-issue> [flags]
 
 Arguments:
   parent-issue    Parent issue number or URL
@@ -161,21 +150,21 @@ gh issue create --title "Feature: User Authentication System" --body "Implement 
 # Created issue #100
 
 # 2. Create sub-issues for implementation tasks
-gh sub-issues create --parent 100 --title "Design database schema" --label "database"
-gh sub-issues create --parent 100 --title "Implement JWT tokens" --label "backend"
-gh sub-issues create --parent 100 --title "Create login UI" --label "frontend"
+gh sub-issue create --parent 100 --title "Design database schema" --label "database"
+gh sub-issue create --parent 100 --title "Implement JWT tokens" --label "backend"
+gh sub-issue create --parent 100 --title "Create login UI" --label "frontend"
 
 # 3. Link an existing issue as a sub-issue
-gh sub-issues add 100 95  # Add existing issue #95 as sub-issue
+gh sub-issue add 100 95  # Add existing issue #95 as sub-issue
 
 # 4. View progress
-gh sub-issues list 100 --state all
+gh sub-issue list 100 --state all
 ```
 
 ### Output example
 
 ```
-$ gh sub-issues list 100
+$ gh sub-issue list 100
 
 Parent: #100 - Feature: User Authentication System
 
@@ -216,8 +205,8 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ```bash
 # Clone the repository
-git clone https://github.com/yahsan2/gh-sub-issues.git
-cd gh-sub-issues
+git clone https://github.com/yahsan2/gh-sub-issue.git
+cd gh-sub-issue
 
 # Install dependencies
 go mod download
@@ -226,7 +215,7 @@ go mod download
 go test ./...
 
 # Build locally
-go build -o gh-sub-issues
+go build -o gh-sub-issue
 
 # Install locally for testing
 gh extension install .
@@ -238,7 +227,7 @@ gh extension install .
 
 | Problem | Solution |
 |---------|----------|
-| `command not found` | Run `gh extension install yahsan2/gh-sub-issues` |
+| `command not found` | Run `gh extension install yahsan2/gh-sub-issue` |
 | `authentication required` | Run `gh auth login` |
 | `parent issue not found` | Check issue number/URL and repository |
 | `permission denied` | Ensure you have write access to the repository |
@@ -249,7 +238,7 @@ gh extension install .
 Enable debug output for troubleshooting:
 
 ```bash
-GH_DEBUG=1 gh sub-issues list 123
+GH_DEBUG=1 gh sub-issue list 123
 ```
 
 ## 📝 Notes
@@ -283,13 +272,13 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📮 Support
 
-- 🐛 [Report a bug](https://github.com/yahsan2/gh-sub-issues/issues/new?labels=bug)
-- 💡 [Request a feature](https://github.com/yahsan2/gh-sub-issues/issues/new?labels=enhancement)
-- 💬 [Ask a question](https://github.com/yahsan2/gh-sub-issues/discussions)
+- 🐛 [Report a bug](https://github.com/yahsan2/gh-sub-issue/issues/new?labels=bug)
+- 💡 [Request a feature](https://github.com/yahsan2/gh-sub-issue/issues/new?labels=enhancement)
+- 💬 [Ask a question](https://github.com/yahsan2/gh-sub-issue/discussions)
 
 ## ⭐ Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=yahsan2/gh-sub-issues&type=Date)](https://star-history.com/#yahsan2/gh-sub-issues&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=yahsan2/gh-sub-issue&type=Date)](https://star-history.com/#yahsan2/gh-sub-issue&Date)
 
 ---
 
