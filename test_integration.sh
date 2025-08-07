@@ -1,7 +1,8 @@
 #!/bin/bash
 # Integration test script for gh-sub-issues
 
-set -e
+# Don't exit on error immediately - we handle errors ourselves
+set +e
 
 echo "🧪 Running Integration Tests for gh-sub-issues"
 echo "=============================================="
@@ -24,38 +25,49 @@ run_test() {
     
     echo -n "Testing: $test_name... "
     
-    if output=$($command 2>&1); then
+    # Run command and capture both stdout and stderr
+    output=$($command 2>&1)
+    exit_code=$?
+    
+    if [ $exit_code -eq 0 ]; then
         if [[ -z "$expected" ]] || [[ "$output" == *"$expected"* ]]; then
             echo -e "${GREEN}✓ PASSED${NC}"
-            ((TESTS_PASSED++))
+            TESTS_PASSED=$((TESTS_PASSED + 1))
         else
             echo -e "${RED}✗ FAILED${NC}"
             echo "  Expected: $expected"
             echo "  Got: $output"
-            ((TESTS_FAILED++))
+            TESTS_FAILED=$((TESTS_FAILED + 1))
         fi
     else
+        # Command failed (non-zero exit code)
         if [[ "$expected" == "ERROR:"* ]]; then
+            # We expected an error
             if [[ "$output" == *"${expected#ERROR:}"* ]]; then
                 echo -e "${GREEN}✓ PASSED${NC} (expected error)"
-                ((TESTS_PASSED++))
+                TESTS_PASSED=$((TESTS_PASSED + 1))
             else
                 echo -e "${RED}✗ FAILED${NC}"
-                echo "  Expected error: ${expected#ERROR:}"
+                echo "  Expected error containing: ${expected#ERROR:}"
                 echo "  Got: $output"
-                ((TESTS_FAILED++))
+                TESTS_FAILED=$((TESTS_FAILED + 1))
             fi
         else
+            # Command failed but we didn't expect an error
             echo -e "${RED}✗ FAILED${NC}"
-            echo "  Command failed unexpectedly: $output"
-            ((TESTS_FAILED++))
+            echo "  Command failed unexpectedly with exit code $exit_code"
+            echo "  Output: $output"
+            TESTS_FAILED=$((TESTS_FAILED + 1))
         fi
     fi
 }
 
 # Build the binary
 echo "Building gh-sub-issues..."
-go build -o gh-sub-issues || exit 1
+if ! go build -o gh-sub-issues; then
+    echo "Failed to build gh-sub-issues"
+    exit 1
+fi
 echo ""
 
 # Test 1: Help text
@@ -78,7 +90,7 @@ run_test "Circular dependency" "./gh-sub-issues add 5 5 --repo test/repo" "ERROR
 # Test 4: URL parsing tests
 echo ""
 echo "=== URL Parsing Tests ==="
-run_test "Invalid URL format" "./gh-sub-issues add https://example.com/123 456 --repo test/repo" "ERROR:not a GitHub URL"
+run_test "Invalid URL format" "./gh-sub-issues add https://example.com/123 456 --repo test/repo" "ERROR:invalid GitHub issue URL format"
 run_test "Non-issue URL" "./gh-sub-issues add https://github.com/owner/repo/pull/123 456 --repo test/repo" "ERROR:not an issue URL"
 
 # Summary
